@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#skrypt wyszukuje i montuje prtycje windosowe
+
+function sprawdz_czy_dysk_zamontowany() {
+    if [ -n "$(grep $1 /proc/mounts)" ]
+    then
+        return 1 #zamontowany
+    else
+        return 0 #nie zamontowany
+    fi 
+}
+
+function montujemy() {
+  # zmienna $1 przejmuje wartosc argumentu wywolania np. sda1
+  sudo mount -r /dev/"$1" /media/"$1" 
+}
+
+#wyszukuje wszystkie dyski i partycje
+sudo fdisk -l | 
+#wyszykuje tylko te windosowe i zapisuje do pliku
+grep 'HPFS\|NTFS\|exFAT\|FAT' |
+#pobiera pierwsza kolumne i zapisuje do pliku
+awk '{ print $1 }' | tee partycje_do_zamontowania.txt |
+#oraz selekcjonuje np. z /dev/sda1 drugi czlon - sda1 i zapisuje
+cut -d / -f 3 > partycje.txt
+
+#sprawdzamy czy plik nie jest pusty
+ 
+#pobiera z pliku nazwy partycji do zamontowania
+for PARTYCJA_DO_ZAMONTOWANIA in `cat partycje.txt`
+do
+	sprawdz_czy_dysk_zamontowany "$PARTYCJA_DO_ZAMONTOWANIA"
+	if [ $? == 0 ] # nie zamontowana
+	then
+    		#sprawdzamy czy katalog juz istnieje
+		#jesli istnieje montujemy 
+		if [ -d /media/${PARTYCJA_DO_ZAMONTOWANIA} ]; then 
+			montujemy ${PARTYCJA_DO_ZAMONTOWANIA}
+		else 
+			#jesli nie istnieje tworzymy go
+			sudo mkdir /media/${PARTYCJA_DO_ZAMONTOWANIA} 
+			#i montujemy
+			montujemy ${PARTYCJA_DO_ZAMONTOWANIA}
+		fi	
+	fi
+done
+
+
+
+
+

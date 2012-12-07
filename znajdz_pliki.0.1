@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#skrypt wyszukuje i zapisuje pliki
+
+# okresla formaty plikow ktore beda wyszukiwane
+RODZAJE_PLIKOW="txt lnk doc xls pdf odt ods odp jpg png gif wav mp3 avi mov mp4 htm html"
+
+#data w formacie rok miesiac dzien godz min sek
+DATA=`date +%y%m%d%H%M%S`
+
+#glowna sciezka do systemu i katalogu z uzytkownikami systemu
+SCIEZKA="/media/c/Users"
+
+#wyszczegolnia katalogi do przeszukania
+KATALOGI_DO_PRZESZUKANIA="Desktop Documents Downloads Pictures Videos"
+
+#pobiera z pliku nazwy uzytkownikow systemu
+for UZYTKOWNIK in `cat ./uzytkownicy_systemu.txt`
+do
+	#wyszukuje katalogi wg warunku
+	for RODZAJ_PLIKU in $RODZAJE_PLIKOW
+	do
+		for KATALOG in $KATALOGI_DO_PRZESZUKANIA
+		do
+			find ${SCIEZKA}/${UZYTKOWNIK}/${KATALOG} -iname '*.'${RODZAJ_PLIKU} >> ${UZYTKOWNIK}_${DATA}_${RODZAJ_PLIKU}.txt
+		done
+	done
+done
