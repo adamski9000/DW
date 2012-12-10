@@ -1,7 +1,13 @@
 #!/bin/bash -xv
 
 #wyszukaj dysk systemowy
-for PARTYCJA in `cat partycje.txt`
+for PARTYCJA in `cat ../system_info/partycje_win.txt`
 do
-find /media/${PARTYCJA}/ -maxdepth 1 -type d -name "Users" -print > partycja_startowa.txt
+	find /media/${PARTYCJA} -maxdepth 1 -type d -name "Users" -print >> ../system_info/partycja_startowa_windows.txt
 done
+
+
+
+#alternatywne rozwiazanie minimalnie wolniejsze
+
+#awk '{system("find \/media\/"$0" -maxdepth 1 -type d -name \"Users\" >> partycja_startowa_windows.txt")}' ../system_info/partycje_win.txt

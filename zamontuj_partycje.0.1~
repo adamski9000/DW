@@ -1,6 +1,6 @@
 #!/bin/bash -v
 
-#skrypt wyszukuje i montuje prtycje windosowe
+#skrypt wyszukuje i montuje partycje windosowe
 
 function sprawdz_czy_dysk_zamontowany() {
     if [ -n "$(grep $1 /proc/mounts)" ]
@@ -21,19 +21,22 @@ sudo fdisk -l |
 #wyszykuje tylko te windosowe i zapisuje do pliku
 grep 'HPFS\|NTFS\|exFAT\|FAT' |
 #pobiera pierwsza kolumne i zapisuje do pliku
-awk '{ print $1 }' | tee partycje_do_zamontowania.txt |
+awk '{ print $1 }' | tee ../system_info/partycje_win_fullpath.txt |
 #oraz selekcjonuje np. z /dev/sda1 drugi czlon - sda1 i zapisuje
-cut -d / -f 3 > partycje.txt
+cut -d / -f 3 > ../system_info/partycje_win.txt
 
-#sprawdzamy czy plik istniej i czy nie jest pusty
-if [ !-e /home/adam/DW/partycje.txt ] && [ !-s /home/adam/DW/partycje.txt ]
+#jesli plik istnieje lub nie jest pusty
+if [ -e ~/DW/system_info/partycje_win.txt ] || [ -s ~/DW/system_info/partycje_win.txt ]
 then
-	echo "Brak pliku z informacją o partycjach do zamontowania. Koniec programu."	
+	echo "Plik z partycjami OK" 
+else
+	echo "Brak pliku z informacją o partycjach do zamontowania lub plik jest pusty. Koniec programu."	
 	exit 1
 fi 
 
+
 #pobiera z pliku nazwy partycji do zamontowania
-for PARTYCJA_DO_ZAMONTOWANIA in `cat partycje.txt`
+for PARTYCJA_DO_ZAMONTOWANIA in `cat ../system_info/partycje_win.txt`
 do
 	sprawdz_czy_dysk_zamontowany "$PARTYCJA_DO_ZAMONTOWANIA"
 	if [ $? == 0 ] # nie zamontowana

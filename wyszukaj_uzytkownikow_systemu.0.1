@@ -1,23 +1,17 @@
 #!/bin/bash
 
-#skrypt wyszukuje i zapisuje pliki
-
-# okresla formaty plikow ktore beda wyszukiwane
-RODZAJE_PLIKOW="txt lnk doc xls pdf odt ods odp jpg png gif wav mp3 avi mov mp4 htm html"
-
-#wus - wyszukaj uzytkownikow systemu
 #skrypt wyszukuje uzytkownikow systemu windows 7 w katalogu Users
 
-#okresla miejsce gdzie szukac katalogi uzytkownikow systemu windows 7 
-KAT=/media/c/Users/
+PARTYCJA=$(cat ../badanie/system_info/partycja_startowa_windows.txt)
  
 #wyswietla wszystkich uzytkownikow systemu
-ls -l $KAT |
+#np. /media/sda1/Users
+ls -l $PARTYCJA |
 
 #wyszukuje tylko katalogi (pierwszy znak z wiersza na litere d - directory)
 grep ^d | 
 
 #wyklucza stale katalogi Default i Public i wyswietla tylo 9 kolumne z wiersza z nazwa katalogu. Ta nazwa katalogu okresla uzytkownika systemu.
-awk '($9 !="Default") && ($9 !="Public") { print $9 }' > ./uzytkownicy_systemu.txt
+awk '($9 !="Default") && ($9 !="Public") { print $9 }' > ../badanie/system_info/uzytkownicy_systemu.txt
 
 

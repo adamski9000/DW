@@ -1,0 +1,30 @@
+#!/bin/bash -xv
+
+#tworzy katalog dla danych uzyskanych z badania systemu
+#w nim beda znajdowac sie wszytskie dane uzyskane z badania systemu
+#aby katalogi sie nie powtarzaly nadajemy im oprocz nazwy numery
+#format katalogu: nazwakatalogu_czasutc
+
+#data w formacie UTC czyli liczba sekund od 1.1.1970
+CZAS_OBECNY=$(date +%s)
+KATALOG_GLOWNY=~/DW/badanie # "$CZAS_OBECNY"
+
+mkdir $KATALOG_GLOWNY && 
+
+#tworzy podkatalogi
+mkdir $KATALOG_GLOWNY/system_info &&
+mkdir $KATALOG_GLOWNY/Uzytkownicy  
+
+#zapisuje do loga.
+#jesli katalogi zostaly utworzone poprawnie
+if [ $? -eq 0 ]
+then	
+	DATA=`date "+%y-%m-%d %H:%M:%S"`
+	#zapisuje loga do DW/badanie
+	printf "%s - Main folders created correct\n" $DATA > $KATALOG_GLOWNY/log.txt
+else
+	DATA=`date "+%y-%m-%d %H:%M:%S"`
+	#zapisuje loga do DW
+	echo $DATA "- Main folders NOT created correct. Error" > ~/DW/log.txt
+fi
+
