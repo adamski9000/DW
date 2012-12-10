@@ -1,0 +1,6 @@
+#!/bin/bash 
+
+for PARTYCJA in `cat partycje.txt`
+do
+	find  /media/${PARTYCJA} -type d "Windows Live Mail" ]
+done

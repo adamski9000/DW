@@ -4,6 +4,7 @@
 
 # okresla formaty plikow ktore beda wyszukiwane
 RODZAJE_PLIKOW="txt lnk doc xls pdf odt ods odp jpg png gif wav mp3 avi mov mp4 htm html"
+#!/bin/bash
 
 #wus - wyszukaj uzytkownikow systemu
 #skrypt wyszukuje uzytkownikow systemu windows 7 w katalogu Users

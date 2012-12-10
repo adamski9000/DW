@@ -1,0 +1,12 @@
+#!/bin/bash 
+
+#jesli plik nie istnieje 
+#jesli plik istnieje lub nie jest pusty
+if [ -e /home/adam/DW/partycje2.txt ] || [ -s /home/adam/DW/partycje2.txt ]
+then
+	echo ok 
+else
+	echo "Brak pliku z informacją o partycjach do zamontowania lub plik jest pusty. Koniec programu."	
+	exit 1
+fi 
+

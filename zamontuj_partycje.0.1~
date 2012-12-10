@@ -25,15 +25,12 @@ awk '{ print $1 }' | tee partycje_do_zamontowania.txt |
 #oraz selekcjonuje np. z /dev/sda1 drugi czlon - sda1 i zapisuje
 cut -d / -f 3 > partycje.txt
 
-#jesli plik istnieje lub nie jest pusty
-if [ -e /home/adam/DW/partycje.txt ] || [ -s /home/adam/DW/partycje.txt ]
+#sprawdzamy czy plik istniej i czy nie jest pusty
+if [ !-e /home/adam/DW/partycje.txt ] && [ !-s /home/adam/DW/partycje.txt ]
 then
-	echo "Plik z partycjami OK" 
-else
-	echo "Brak pliku z informacją o partycjach do zamontowania lub plik jest pusty. Koniec programu."	
+	echo "Brak pliku z informacją o partycjach do zamontowania. Koniec programu."	
 	exit 1
 fi 
-
 
 #pobiera z pliku nazwy partycji do zamontowania
 for PARTYCJA_DO_ZAMONTOWANIA in `cat partycje.txt`
