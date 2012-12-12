@@ -10,13 +10,13 @@ DATA=`date +%y%m%d%H%M%S`
 
 #glowna sciezka do systemu i katalogu z uzytkownikami systemu
 #np. /media/sda1/Users
-SCIEZKA=$(cat ../system_info/partycja_startowa_windows.txt)
+SCIEZKA=$(cat ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt)
 
 #wyszczegolnia katalogi do przeszukania
 KATALOGI_DO_PRZESZUKANIA="Desktop Documents Downloads Pictures Videos"
 
 #pobiera z pliku nazwy uzytkownikow systemu
-for UZYTKOWNIK in `cat ../system_info/uzytkownicy_systemu.txt`
+for UZYTKOWNIK in `cat ${KATALOG_GLOWNY}/system_info/uzytkownicy_systemu.txt`
 do
 	#wyszukuje katalogi wg warunku
 	for RODZAJ_PLIKU in $RODZAJE_PLIKOW

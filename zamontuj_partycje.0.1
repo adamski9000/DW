@@ -21,12 +21,12 @@ sudo fdisk -l |
 #wyszykuje tylko te windosowe i zapisuje do pliku
 grep 'HPFS\|NTFS\|exFAT\|FAT' |
 #pobiera pierwsza kolumne i zapisuje do pliku
-awk '{ print $1 }' | tee ../badanie/system_info/partycje_win_fullpath.txt |
+awk '{ print $1 }' | tee ${KATALOG_GLOWNY}/system_info/partycje_win_fullpath.txt |
 #oraz selekcjonuje np. z /dev/sda1 drugi czlon - sda1 i zapisuje
-cut -d / -f 3 > ../badanie/system_info/partycje_win.txt
+cut -d / -f 3 > ${KATALOG_GLOWNY}/system_info/partycje_win.txt
 
 #jesli plik istnieje lub nie jest pusty
-if [ -e ~/DW/badanie/system_info/partycje_win.txt ] || [ -s ~/DW/badanie/system_info/partycje_win.txt ]
+if [ -e ${KATALOG_GLOWNY}/system_info/partycje_win.txt ] && [ -s ${KATALOG_GLOWNY}/system_info/partycje_win.txt ]
 then
 	echo "Plik z partycjami OK" 
 else

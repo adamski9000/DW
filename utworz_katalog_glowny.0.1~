@@ -7,13 +7,13 @@
 
 #data w formacie UTC czyli liczba sekund od 1.1.1970
 CZAS_OBECNY=$(date +%s)
+#katalog w ktorym beda zapisane wszystkie wyniki z badania systemu
 KATALOG_GLOWNY=~/DW/badanie # "$CZAS_OBECNY"
 
 mkdir $KATALOG_GLOWNY && 
-
 #tworzy podkatalogi
 mkdir $KATALOG_GLOWNY/system_info &&
-mkdir $KATALOG_GLOWNY/Uzytkownicy  
+mkdir $KATALOG_GLOWNY/Users
 
 #zapisuje do loga.
 #jesli katalogi zostaly utworzone poprawnie
@@ -21,10 +21,13 @@ if [ $? -eq 0 ]
 then	
 	DATA=`date "+%y-%m-%d %H:%M:%S"`
 	#zapisuje loga do DW/badanie
-	printf "%s - Main folders created correct\n" $DATA > $KATALOG_GLOWNY/log.txt
+	echo $DATA "- Main folders created correct in " $KATALOG_GLOWNY  > $KATALOG_GLOWNY/log.txt
+	#ustawia zmienna globalna. 
+	#do tej sciezki beda odnosic sie wszystkie inne skrypty
+	export $KATALOG_GLOWNY
 else
 	DATA=`date "+%y-%m-%d %H:%M:%S"`
 	#zapisuje loga do DW
-	echo $DATA "- Main folders NOT created correct. Error" > ~/DW/log.txt
+	echo $DATA "- Main folders NOT created correct in " $KATALOG_GLOWNY > ~/DW/log.txt
 fi
 
