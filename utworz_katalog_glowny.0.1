@@ -17,17 +17,17 @@ mkdir $KATALOG_GLOWNY/Users
 
 #zapisuje do loga.
 #jesli katalogi zostaly utworzone poprawnie
-if [ $? -eq 0 ]
+if [ -d $KATALOG_GLOWNY/Users ]
 then	
 	DATA=`date "+%y-%m-%d %H:%M:%S"`
 	#zapisuje loga do DW/badanie
 	echo $DATA "- Main folders created correct in " $KATALOG_GLOWNY  > ${KATALOG_GLOWNY}/log.txt
 	#ustawia zmienna globalna. 
 	#do tej sciezki beda odnosic sie wszystkie inne skrypty
-	export $KATALOG_GLOWNY
+	export ${KATALOG_GLOWNY}
 else
 	DATA=`date "+%y-%m-%d %H:%M:%S"`
 	#zapisuje loga do DW
-	echo $DATA "- Main folders NOT created correct in " $KATALOG_GLOWNY > ~/DW/log.txt
+	echo $DATA "- Main folders NOT created correct. in " $KATALOG_GLOWNY > ~/DW/log_error.txt
 fi
 

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ ! -d ${KATALOG_GLOWNY}/Users ]
+  then
+	mkdir ${KATALOG_GLOWNY}/Users
+fi
+
+#tworzy katalogi uzytkownikow systemu
+for UZYTKOWNIK in `cat ${KATALOG_GLOWNY}/system_info/uzytkownicy_systemu.txt`
+  do
+	if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK} ]
+	  then
+		mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}
+	fi
+done

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#skrypt wyszukuje uzytkownikow systemu windows 7 w katalogu Users
+#skrypt wyszukuje uzytkownikow systemu windows 7 / Vista w katalogu Users
 
-PARTYCJA=$(cat ../system_info/partycja_startowa_windows.txt)
+PARTYCJA=$(cat ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt)
  
 #wyswietla wszystkich uzytkownikow systemu
 #np. /media/sda1/Users
@@ -12,6 +12,6 @@ ls -l $PARTYCJA |
 grep ^d | 
 
 #wyklucza stale katalogi Default i Public i wyswietla tylo 9 kolumne z wiersza z nazwa katalogu. Ta nazwa katalogu okresla uzytkownika systemu.
-awk '($9 !="Default") && ($9 !="Public") { print $9 }' > ../system_info/uzytkownicy_systemu.txt
+awk '($9 !="Default") && ($9 !="Public") { print $9 }' > ${KATALOG_GLOWNY}/system_info/uzytkownicy_systemu.txt
 
 

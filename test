@@ -1,12 +1,10 @@
-#!/bin/bash 
+#!/bin/bash -xv
 
-#jesli plik nie istnieje 
-#jesli plik istnieje lub nie jest pusty
-if [ -e /home/adam/DW/partycje.txt ] || [ -s /home/adam/DW/partycje.txt ]
+if [ -d "/media/c/Users/admin/AppData/Local/Microsoft/Windows Live Mail" ]
 then
-	echo ok 
+	echo "OK"
+	DD="z1"
 else
-	echo "Brak pliku z informacją o partycjach do zamontowania lub plik jest pusty. Koniec programu."	
-	exit 1
-fi 
+	echo "Brak"
+fi
 

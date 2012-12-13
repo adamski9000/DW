@@ -1,3 +1,26 @@
 #!/bin/bash 
 
+./utworz_katalogi_poczty.0.1 
+
+DATA=`date "+%y-%m-%d %H:%M:%S"`
+
+#wyszukuje poczte WLM na kazdym koncie uzytkownika
+for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
+   do
+	for UZYTKOWNIK in `cat ${KATALOG_GLOWNY}/system_info/uzytkownicy_systemu.txt`
+   	   do
+		if [ -d "/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" ];
+		  then
+			#zapisuje sciezke do WLM
+			echo "/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" >> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/path_WLM.txt
+			#zapisuje loga
+			echo $DATA "- I found Windows Live Mail in /media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" >> ${KATALOG_GLOWNY}/log.txt
+ 		  else 
+			#zapisuje loga
+			$DATA "- I did not find Windows Live Mail in /media/${PARTYCJA}/Users/${UZYTKOWNIK}..." >> ${KATALOG_GLOWNY}/log.txt
+		fi
+	done 
+done
+
+
 

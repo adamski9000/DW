@@ -4,11 +4,12 @@
 
 DATA=`date "+%y-%m-%d %H:%M:%S"`
 
-#wyszukuje poczte WLM na kazdym koncie uzytkownika
+#wyszukuje poczte MS Outlook na kazdym koncie uzytkownika
 for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
    do
 	for UZYTKOWNIK in `cat ${KATALOG_GLOWNY}/system_info/uzytkownicy_systemu.txt`
    	   do
+		find /media/${PARTYCJA}/ -iname "*.pst"
 		if [ -d "/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" ];
 		  then
 			#zapisuje sciezke do WLM

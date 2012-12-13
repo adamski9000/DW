@@ -10,9 +10,10 @@ DATA=`date "+%y-%m-%d %H:%M:%S"`
 
 #zapisuje loga
 #jesli plik istnieje i nie jest pusty
-if [ -e ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt ] && [ -s  ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt ]
+SCIEZ1=system_info/partycja_startowa_windows.txt
+if [ -e ${KATALOG_GLOWNY}/${SCIEZ1} ] && [ -s  ${KATALOG_GLOWNY}/${SCIEZ1} ]
 then
-	DISKWIN=$(cat ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt)
+	DISKWIN=$(cat ${KATALOG_GLOWNY}/${SCIEZ1})
 	echo $DATA "- Disk with Windows 7 / Vista found in " $DISKWIN > ${KATALOG_GLOWNY}/log.txt	
 else
 	echo $DATA "- System with Windows not found. No file or file is empty" > ${KATALOG_GLOWNY}/log.txt

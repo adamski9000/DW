@@ -13,7 +13,12 @@ function sprawdz_czy_dysk_zamontowany() {
 
 function montujemy() {
   # zmienna $1 przejmuje wartosc argumentu wywolania np. sda1
+  # mountujemy w trybie do odczytu -r
   sudo mount -r /dev/"$1" /media/"$1" 
+  #zapis do loga
+  DATA=`date "+%y-%m-%d %H:%M:%S"`
+  echo $DATA "- Partition /dev/${1} mounted in /media/{$1}" >> ${KATALOG_GLOWNY}/log.txt
+	
 }
 
 #wyszukuje wszystkie dyski i partycje
@@ -21,22 +26,27 @@ sudo fdisk -l |
 #wyszykuje tylko te windosowe i zapisuje do pliku
 grep 'HPFS\|NTFS\|exFAT\|FAT' |
 #pobiera pierwsza kolumne i zapisuje do pliku
-awk '{ print $1 }' | tee ../badanie/system_info/partycje_win_fullpath.txt |
+awk '{ print $1 }' | 
+#zapisuje pelna sciezke do dyskow
+tee ${KATALOG_GLOWNY}/system_info/partycje_win_fullpath.txt |
 #oraz selekcjonuje np. z /dev/sda1 drugi czlon - sda1 i zapisuje
-cut -d / -f 3 > ../badanie/system_info/partycje_win.txt
+cut -d / -f 3 > ${KATALOG_GLOWNY}/system_info/partycje_win.txt
+
+DATA=`date "+%y-%m-%d %H:%M:%S"`
 
 #jesli plik istnieje lub nie jest pusty
-if [ -e ~/DW/badanie/system_info/partycje_win.txt ] || [ -s ~/DW/badanie/system_info/partycje_win.txt ]
+if [ -e ${KATALOG_GLOWNY}/system_info/partycje_win.txt ] && [ -s ${KATALOG_GLOWNY}/system_info/partycje_win.txt ]
 then
-	echo "Plik z partycjami OK" 
+	echo $DATA "- Found windows partition" >> ${KATALOG_GLOWNY}/log.txt
 else
-	echo "Brak pliku z informacją o partycjach do zamontowania lub plik jest pusty. Koniec programu."	
+	#zapis loga
+	echo $DATA "- No file with info about windows partition or file is empty" >> ${KATALOG_GLOWNY}/log.txt
 	exit 1
 fi 
 
 
 #pobiera z pliku nazwy partycji do zamontowania
-for PARTYCJA_DO_ZAMONTOWANIA in `cat ../system_info/partycje_win.txt`
+for PARTYCJA_DO_ZAMONTOWANIA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
 do
 	sprawdz_czy_dysk_zamontowany "$PARTYCJA_DO_ZAMONTOWANIA"
 	if [ $? == 0 ] # nie zamontowana
