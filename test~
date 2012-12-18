@@ -1,9 +1,6 @@
 #!/bin/bash -xv
 
-if [ -d "/media/c/Users/admin/AppData/Local/Microsoft/Windows Live Mail" ]
-then
-	echo "OK"
-else
-	echo "Brak"
-fi
+find /media/sda1/Users/admin/AppData/Local/Microsoft/Windows Live Mail -iname "*.eml" > ~/DW/badanie/Users/admin/Mail/WLM/mails_in_WLM.txt
+
+
 

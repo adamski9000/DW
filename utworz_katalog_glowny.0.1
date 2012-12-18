@@ -1,8 +1,8 @@
-#!/bin/bash -xv
+#!/bin/bash -x
 
 #tworzy katalog dla danych uzyskanych z badania systemu
 #w nim beda znajdowac sie wszytskie dane uzyskane z badania systemu
-#aby katalogi sie nie powtarzaly nadajemy im oprocz nazwy numery
+#aby katalog glowny badania sie nie powtarzal nadajemy mu oprocz nazwy numery
 #format katalogu: nazwakatalogu_czasutc
 
 #data w formacie UTC czyli liczba sekund od 1.1.1970
@@ -24,10 +24,10 @@ then
 	echo $DATA "- Main folders created correct in " $KATALOG_GLOWNY  > ${KATALOG_GLOWNY}/log.txt
 	#ustawia zmienna globalna. 
 	#do tej sciezki beda odnosic sie wszystkie inne skrypty
-	export ${KATALOG_GLOWNY}
+	export KATALOG_GLOWNY
 else
 	DATA=`date "+%y-%m-%d %H:%M:%S"`
-	#zapisuje loga do DW
+	#zapisuje loga do glownego katalogu DW
 	echo $DATA "- Main folders NOT created correct. in " $KATALOG_GLOWNY > ~/DW/log_error.txt
 fi
 

@@ -36,3 +36,13 @@ USERS
 3. Kolejnosc wykonywania skryptow
 	1. utworz_katalog_glowny
 	2. zamontuj_patycje
+
+
+4. Bugi
+	a) wykrywa tylko jedna partycje systemową windows. Gdy jest wiecej nie wykrywa. Ograniczenie w pliku wyszukaj_dysk_systemowy. Jest to spowodowane tym, iz gdy zapisze w pliku partycja_systemowa_windows wiecej partycji, pozniej jest problem, gdyz zamiast czytac jedna dostepna sciezke, czytaja wszystkie i sie sypie
+
+5. Kolejnosc uruchamiania skryptow.
+a) utworz_katalog_glowny - tworzy katalog glowny badania i podkatalogi. 
+b) zamontuj partycje - montuje partycje windows
+c) wyszukaj_dysk_systemowy - wyszukuje dysk systemowy
+d) wyszukaj uzytkownikow systemu - zapisuje uzytkownikow windows z katalogu Users

@@ -1,26 +1,46 @@
-#!/bin/bash 
+#!/bin/bash -x
 
-./utworz_katalogi_poczty.0.1 
-
-DATA=`date "+%y-%m-%d %H:%M:%S"`
+KATALOG_GLOWNY=~/DW/badanie
 
 #wyszukuje poczte MS Outlook na kazdym koncie uzytkownika
 for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
    do
+
 	for UZYTKOWNIK in `cat ${KATALOG_GLOWNY}/system_info/uzytkownicy_systemu.txt`
    	   do
-		find /media/${PARTYCJA}/ -iname "*.pst"
-		if [ -d "/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" ];
+
+		#tworzy katalogi jesli nie ma
+		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK} ]; then 
+			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}; fi
+		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail ]; then 
+			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail; fi
+		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook ]; then 
+			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook; fi
+
+		DATA=`date "+%y-%m-%d %H:%M:%S"`
+
+		#zapisuje loga
+		echo $DATA "- I am looking for Outlook folder on ${PARTYCJA}..." >> ${KATALOG_GLOWNY}/log.txt
+		
+		SCIEZKA_DO_OUTLOOK="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Outlook"
+		if [ -d  "$SCIEZKA_DO_OUTLOOK" ]
 		  then
 			#zapisuje sciezke do WLM
-			echo "/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" >> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/path_WLM.txt
+			echo $SCIEZKA_DO_OUTLOOK >> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook/path_Outlook.txt
 			#zapisuje loga
-			echo $DATA "- I found Windows Live Mail in /media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" >> ${KATALOG_GLOWNY}/log.txt
+			echo "  I found Outlook folder in ${SCIEZKA_DO_OUTLOOK}" >> ${KATALOG_GLOWNY}/log.txt
+			#szukamy maili w formacie pst
+			find "/media/${PARTYCJA}/Users/${UZYTKOWNIK}" -iname "*.pst" -print >> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook/mails_in_Outlook.txt
+			#zlicza ilosc znalezionych maili
+			ILOSC_MAILI=$(cat ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook/mails_in_Outlook.txt | wc -l )
+			echo "  I found ${ILOSC_MAILI} archive in Outlook" >> ${KATALOG_GLOWNY}/log.txt
  		  else 
 			#zapisuje loga
-			$DATA "- I did not find Windows Live Mail in /media/${PARTYCJA}/Users/${UZYTKOWNIK}..." >> ${KATALOG_GLOWNY}/log.txt
+			echo "  I did not find Outlook folder in ${SCIEZKA_DO_OUTLOOK}" >> ${KATALOG_GLOWNY}/log.txt
 		fi
+
 	done 
+
 done
 
 

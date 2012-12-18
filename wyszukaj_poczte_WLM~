@@ -1,25 +1,46 @@
-#!/bin/bash 
+#!/bin/bash -x
 
-./utworz_katalogi_poczty.0.1 
-
-DATA=`date "+%y-%m-%d %H:%M:%S"`
+KATALOG_GLOWNY=~/DW/badanie
 
 #wyszukuje poczte WLM na kazdym koncie uzytkownika
 for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
    do
+
 	for UZYTKOWNIK in `cat ${KATALOG_GLOWNY}/system_info/uzytkownicy_systemu.txt`
    	   do
-		if [ -d "/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" ];
+
+		#tworzy katalogi jesli nie ma
+		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK} ]; then 
+			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}; fi
+		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail ]; then 
+			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail; fi
+		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook ]; then 
+			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook; fi
+
+		DATA=`date "+%y-%m-%d %H:%M:%S"`
+
+		#zapisuje loga
+		echo $DATA "- I am looking for Windows Live Mail folder on ${PARTYCJA}..." >> ${KATALOG_GLOWNY}/log.txt
+
+		SCIEZKA_DO_WLM="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail"
+		if [ -d  "$SCIEZKA_DO_WLM" ]
 		  then
 			#zapisuje sciezke do WLM
-			echo "/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" >> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/path_WLM.txt
+			echo $SCIEZKA_DO_WLM > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/WLM/path_WLM.txt
 			#zapisuje loga
-			echo $DATA "- I found Windows Live Mail in /media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail" >> ${KATALOG_GLOWNY}/log.txt
+			echo "  I found Windows Live Mail folder in ${SCIEZKA_DO_WLM}" >> ${KATALOG_GLOWNY}/log.txt
+			#szukamy maili w formacie eml
+			find "${SCIEZKA_DO_WLM}" -iname "*.eml" > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/WLM/mails_in_WLM.txt
+			#zlicza ilosc znalezionych maili
+			ILOSC_MAILI=$(cat ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/WLM/mails_in_WLM.txt | wc -l )
+			echo "  I found ${ILOSC_MAILI} mails in Windows Live Mail" >> ${KATALOG_GLOWNY}/log.txt
  		  else 
 			#zapisuje loga
-			$DATA "- I did not find Windows Live Mail in /media/${PARTYCJA}/Users/${UZYTKOWNIK}..." >> ${KATALOG_GLOWNY}/log.txt
+			echo "  I did not find Windows Live Mail folder in ${SCIEZKA_DO_WLM}" >> ${KATALOG_GLOWNY}/log.txt
 		fi
+
 	done 
+
 done
 
 
