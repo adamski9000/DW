@@ -14,29 +14,29 @@ for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
 			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}; fi
 		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail ]; then 
 			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail; fi
-		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook ]; then 
-			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook; fi
+		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Thunderbird; then 
+			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Thunderbird; fi
 
 		DATA=`date "+%y-%m-%d %H:%M:%S"`
 
 		#zapisuje loga
-		echo $DATA "- I am looking for Windows Live Mail folder on ${PARTYCJA}..." >> ${KATALOG_GLOWNY}/log.txt
+		echo $DATA "- I am looking for Thunderbird folder on ${PARTYCJA}..." >> ${KATALOG_GLOWNY}/log.txt
 
-		SCIEZKA_DO_WLM="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail"
-		if [ -d  "$SCIEZKA_DO_WLM" ]
+		SCIEZKA_DO_THUNDERBIRD="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail"
+		if [ -d  "$SCIEZKA_DO_THUNDERBIRD" ]
 		  then
 			#zapisuje sciezke do WLM
-			echo $SCIEZKA_DO_WLM > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/WLM/path_WLM.txt
+			echo $SCIEZKA_DO_THUNDERBIRD > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/WLM/path_WLM.txt
 			#zapisuje loga
-			echo "  I found Windows Live Mail folder in ${SCIEZKA_DO_WLM}" >> ${KATALOG_GLOWNY}/log.txt
+			echo "  I found Thunderbird folder in ${SCIEZKA_DO_THUNDERBIRD}" >> ${KATALOG_GLOWNY}/log.txt
 			#szukamy maili w formacie eml
-			find "${SCIEZKA_DO_WLM}" -iname "*.eml" > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/WLM/mails_in_WLM.txt
+			find "${SCIEZKA_DO_THUNDERBIRD}" -iname "*.eml" > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Thunderbird/mails_in_Thunderbird.txt
 			#zlicza ilosc znalezionych maili
-			ILOSC_MAILI=$(cat ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/WLM/mails_in_WLM.txt | wc -l )
-			echo "  I found ${ILOSC_MAILI} mails in Windows Live Mail" >> ${KATALOG_GLOWNY}/log.txt
+			ILOSC_MAILI=$(cat ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Thunderbird/mails_in_Thunderbird.txt | wc -l )
+			echo "  I found ${ILOSC_MAILI} mails in Thunderbird" >> ${KATALOG_GLOWNY}/log.txt
  		  else 
 			#zapisuje loga
-			echo "  I did not find Windows Live Mail folder in ${SCIEZKA_DO_WLM}" >> ${KATALOG_GLOWNY}/log.txt
+			echo "  I did not find Thunderbird folder in ${SCIEZKA_DO_THUNDERBIRD}" >> ${KATALOG_GLOWNY}/log.txt
 		fi
 
 	done 

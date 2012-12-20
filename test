@@ -1,6 +1,6 @@
-#!/bin/bash -xv
+#!/bin/bash -x
 
-find "/media/sda1/Users/admin/AppData/Local/Microsoft/Windows Live Mail" -iname "*.eml" > ~/DW/badanie/Users/admin/Mail/WLM/mails_in_WLM.txt
+find "/media/sda1/Users/admin/AppData/Roaming/Thunderbird" -iname "inbox"  -print #> ~/DW/badanie/Users/admin/Mail/Thunderbird/mails_in_Thunderbird.txt
 
 
 

@@ -22,18 +22,18 @@ for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
 		#zapisuje loga
 		echo $DATA "- I am looking for Thunderbird folder on ${PARTYCJA}..." >> ${KATALOG_GLOWNY}/log.txt
 
-		SCIEZKA_DO_THUNDERBIRD="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail"
+		SCIEZKA_DO_THUNDERBIRD="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Thunderbird"
 		if [ -d  "$SCIEZKA_DO_THUNDERBIRD" ]
 		  then
 			#zapisuje sciezke do WLM
-			echo $SCIEZKA_DO_THUNDERBIRD > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/WLM/path_WLM.txt
+			echo $SCIEZKA_DO_THUNDERBIRD > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Thunderbird/path_Thunderbird.txt
 			#zapisuje loga
 			echo "  I found Thunderbird folder in ${SCIEZKA_DO_THUNDERBIRD}" >> ${KATALOG_GLOWNY}/log.txt
-			#szukamy maili w formacie eml
+			#szukamy zalozonych kont
 			find "${SCIEZKA_DO_THUNDERBIRD}" -iname "*.eml" > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Thunderbird/mails_in_Thunderbird.txt
 			#zlicza ilosc znalezionych maili
 			ILOSC_MAILI=$(cat ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Thunderbird/mails_in_Thunderbird.txt | wc -l )
-			echo "  I found ${ILOSC_MAILI} mails in Thunderbird" >> ${KATALOG_GLOWNY}/log.txt
+			echo "  I found ${ILOSC_MAILI} counts in Thunderbird" >> ${KATALOG_GLOWNY}/log.txt
  		  else 
 			#zapisuje loga
 			echo "  I did not find Thunderbird folder in ${SCIEZKA_DO_THUNDERBIRD}" >> ${KATALOG_GLOWNY}/log.txt
