@@ -2,36 +2,42 @@
 
 KATALOG_GLOWNY=~/DW/badanie
 
+function log()
+{
+	echo $1 >> $KATALOG_GLOWNY/log.txt
+}
+
+#zabezpieczenie, aby nie dopisywall partycji systemowych win przy przypadkowymponownym wywolaniu. 
+#jesli plik istnieje i nie jest pusty wtedy przerywamy
+if [ -e "${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt" ] || 
+	[ -s "${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt" ]
+	  then 
+		#jest juz plik z partycja. Przerywamy
+		exit -1
+fi
+
+DATA=`date "+%y-%m-%d %H:%M:%S"`
+
+log "$DATA - Im looking for disks with Windows systems."
+
 #wyszukaj dysk systemowy
 for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
 do
-	#zabezpieczenie, aby zapisywał tylko jedna partycje systemowa win. Zabezpieczenie, gdyz gdy wykryje wiecej niz 1 systemy windows na dysku pozniej pojawia sie problem
-	#jesli plik istnieje i nie jest pusty wtedy przerywamy
-	if [ -e ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt ] || [ -s ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt ]
-	  then 
-		#jest juz plik z partycja. Przerywamy
-		break
-	  else
-		#sprawdzamy czy to nie przypadkowy katalog sprawdzajac katalogi domyslne czy istnieja
-		if [ -d /media/${PARTYCJA}/Users/Public/Desktop ] &&
-			[ -d /media/${PARTYCJA}/Users/Default/AppData ]
-		  then
-			echo /media/${PARTYCJA}/Users > $KATALOG_GLOWNY/system_info/partycja_startowa_windows.txt
-		fi
+	#sprawdzamy czy to nie przypadkowy katalog sprawdzajac katalogi domyslne czy istnieja
+	if [ -d /media/${PARTYCJA}/Users/Public/Desktop ] && [ -d /media/${PARTYCJA}/Users/Default/AppData ]
+		then
+			echo $PARTYCJA >> $KATALOG_GLOWNY/system_info/partycja_startowa_windows.txt
+			log "- Disk with Windows system found on disk: ${PARTYCJA}"	
 	fi
 done
 
-DATA=`date "+%y-%m-%d %H:%M:%S"`
 
 #zapisuje loga
 #jesli plik istnieje i nie jest pusty
 SCIEZ1="system_info/partycja_startowa_windows.txt"
-if [ -e ${KATALOG_GLOWNY}/${SCIEZ1} ] && [ -s  ${KATALOG_GLOWNY}/${SCIEZ1} ]
+if [ ! -e ${KATALOG_GLOWNY}/${SCIEZ1} ] && [ ! -s  ${KATALOG_GLOWNY}/${SCIEZ1} ]
 then
-	DISKWIN=$(cat ${KATALOG_GLOWNY}/${SCIEZ1})
-	echo $DATA "- Disk with Windows 7 / Vista found in" $DISKWIN >> ${KATALOG_GLOWNY}/log.txt	
-else
-	echo $DATA "- System with Windows not found. No file or file is empty" >> ${KATALOG_GLOWNY}/log.txt
+	log "- System with system Windows not found or no file or file is empty"
 fi
 
 #alternatywne rozwiazanie minimalnie wolniejsze, jako ciekawostka

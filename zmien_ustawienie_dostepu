@@ -1,0 +1,6 @@
+#!/bin/bash -x
+
+KATALOG_GLOWNY=~/DW/badanie
+
+#zmieniamy uprawnienia katalogow, podkatalogow i plikow w anej sciezce na tylko do odczytu i wykonywania
+chmod -R 555 $KATALOG_GLOWNY

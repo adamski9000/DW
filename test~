@@ -1,6 +1,11 @@
 #!/bin/bash -x
+ 
+while read LINE
+do
+        echo ${LINE}
+done < ~/DW/badanie/log.txt
 
-find "/media/sda1/Users/admin/AppData/Roaming/Thunderbird" -iname "inbox"  -print #> ~/DW/badanie/Users/admin/Mail/Thunderbird/mails_in_Thunderbird.txt
+[ -e ~/DW/badanie/*.txz ] && echo "OK" || echo "NO"
 
 
 

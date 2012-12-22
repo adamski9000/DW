@@ -1,0 +1,64 @@
+#!/bin/bash -x
+
+#format wywaolania skryptu: wyszukaj_ksiazki_adresowe_poczty uzytkowniksystemu klientpoczty
+
+KATALOG_GLOWNY=~/DW/badanie
+
+function log()
+{
+	echo $1 >> ${KATALOG_GLOWNY}/log.txt 
+}
+
+UZYTKOWNIK=$1
+KLIENT_POCZTY=$2
+
+INFO_OK="- Link to ${KLIENT_POCZTY} contacts saved correct. OK."
+
+DATA=`date "+%y-%m-%d %H:%M:%S"`
+
+log "$DATA - I look for ${KLIENT_POCZTY} contacts."
+
+#tworzy katalogi jesli niema
+mkdir -p "${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Contacts/${KLIENT_POCZTY}" &&
+log "- ${KLIENT_POCZTY} Contacts folders on destination drive correct. OK" || 
+{ log " I coud NOT create ${KLIENT_POCZTY} Contacts folders on destination drive. Error."; exit 1; }
+
+if [ $KLIENT_POCZTY == "WLM" ]; 
+then
+    #sprawdzamy na kazdej z partycji windowsowych
+    for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
+   	do
+	  # sciezka do ksiazki adrresowej dla wersji Windows Live Mail 2011
+	  SCIEZKA_WLM_2012="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live/Contacts/Default/15.4/DBStore/contacts.edb"
+	  # sciezka do ksiazki adrresowej dla wersji Windows Live Mail 2009
+	  SCIEZKA_WLM_2009="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Contacts/{0a1c1d7e-4a67-4693-bd70-1ba1490ddac8}/DBStore/contacts.edb"
+	  #plik z adresami to: contacts.edb
+	  PLIK="${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Contacts/${KLIENT_POCZTY}/path_WLM_contacts.txt"
+
+	  if [ -e  "$SCIEZKA_WLM_2012" ]; then
+		echo $SCIEZKA_WLM_2012 >> $PLIK
+		log  $INFO_OK 
+	  elif [ -e "$SCIEZKA_WLM_2009" ]; then
+		echo $SCIEZKA_WLM_2009 >> $PLIK
+		log  $INFO_OK		
+	  fi
+    done
+    # jesli plik z linkiem do oryginalu nie istnieje lub jest pusty
+    if [ ! -e $PLIK ] || [ ! -s $PLIK ]; then
+	log "- I coudn not find  ${KLIENT_POCZTY} contacts or file is empty"
+    fi
+
+elif [ $KLIENT_POCZTY == "Outlook" ];
+then
+	for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
+   	    do
+		#plik z kontaktami i z mailami to jest ten sam plik *.pst
+		PLIK_PST="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Outlook/*.pst"
+		#jesli jakis istnieje na partycji windowsowej	
+		if [ -e "$PLIK_PST" ]; then
+			echo $PLIK_PST >> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Contacts/${KLIENT_POCZTY}/path_Outlook_contacts.txt 
+			log  $INFO_OK
+		fi 
+	done
+
+ 

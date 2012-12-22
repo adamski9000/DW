@@ -5,29 +5,38 @@
 #aby katalog glowny badania sie nie powtarzal nadajemy mu oprocz nazwy numery
 #format katalogu: nazwakatalogu_czasutc
 
+function log()
+{
+	echo $1 >> $KATALOG_GLOWNY/log.txt
+}
+
+KATALOG_GLOWNY=~/DW/badanie # "$CZAS_OBECNY"
+
 #data w formacie UTC czyli liczba sekund od 1.1.1970
 CZAS_OBECNY=$(date +%s)
 #katalog w ktorym beda zapisane wszystkie wyniki z badania systemu
-KATALOG_GLOWNY=~/DW/badanie # "$CZAS_OBECNY"
 
-mkdir $KATALOG_GLOWNY && 
-#tworzy podkatalogi
-mkdir $KATALOG_GLOWNY/system_info &&
-mkdir $KATALOG_GLOWNY/Users
+
+#tworzy katalogi z podkatalogami
+mkdir -p "$KATALOG_GLOWNY/system_info" &&
+mkdir "$KATALOG_GLOWNY/Users"
+
+DATA=`date "+%y-%m-%d %H:%M:%S"`
+
+log "$DATA - I create main folders in ${KATALOG_GLOWNY}"
 
 #zapisuje do loga.
 #jesli katalogi zostaly utworzone poprawnie
-if [ -d $KATALOG_GLOWNY/Users ]
+if [ -d "$KATALOG_GLOWNY/Users" ]
 then	
-	DATA=`date "+%y-%m-%d %H:%M:%S"`
+	
 	#zapisuje loga do DW/badanie
-	echo $DATA "- Main folders created correct in " $KATALOG_GLOWNY  > ${KATALOG_GLOWNY}/log.txt
+	log "- Main folders correct in ${KATALOG_GLOWNY}. OK "
 	#ustawia zmienna globalna. 
 	#do tej sciezki beda odnosic sie wszystkie inne skrypty
-	export KATALOG_GLOWNY
+	export KATALOG_GLOWNY=$KATALOG_GLOWNY
 else
-	DATA=`date "+%y-%m-%d %H:%M:%S"`
 	#zapisuje loga do glownego katalogu DW
-	echo $DATA "- Main folders NOT created correct. in " $KATALOG_GLOWNY > ~/DW/log_error.txt
+	echo "- Main folders NOT created correct in  ${KATALOG_GLOWNY}. Error" > ~/DW/log_error.txt
 fi
 

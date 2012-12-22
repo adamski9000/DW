@@ -1,0 +1,58 @@
+#!/bin/bash -x
+
+#format wywolania skryptu: wyszukaj_poczte uzytkowniksystemu klient_poczty. Np. wyszukaj_poczte admin WLM
+#wyszukuje poczte na kazdym koncie uzytkownika
+
+function log()
+{
+	echo $1 >> ${KATALOG_GLOWNY}/log.txt 
+}
+
+KATALOG_GLOWNY=~/DW/badanie
+UZYTKOWNIK=$1
+KLIENT_POCZTY=$2
+
+DATA=`date "+%y-%m-%d %H:%M:%S"`
+
+log "$DATA - Im preapereing to find email clients." 
+
+#tworzy katalogi jesli nie ma
+mkdir -p ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/${KLIENT_POCZTY} && 
+log "- ${KLIENT_POCZTY} folders on destination drive correct. OK" || 
+log " I coud NOT create ${KLIENT_POCZTY} folders on destination drive. Error." 
+
+for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt`
+   do
+
+	if [ "$KLIENT_POCZTY" == "Outlook" ]; then
+		SCIEZKA_DO_KLIENTA="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Outlook"
+		FORMAT_POCZTY="*.pst"
+		CO_ZNALEZIONO="archive/s"
+	elif [ "$KLIENT_POCZTY" == "WLM" ]; then
+		SCIEZKA_DO_KLIENTA="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail"
+		FORMAT_POCZTY="*.eml"
+		CO_ZNALEZIONO="mails"
+	elif [ "$KLIENT_POCZTY" == "Thunderbird" ]; then
+		SCIEZKA_DO_KLIENTA="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Thunderbird"
+		FORMAT_POCZTY="inbox"
+		CO_ZNALEZIONO="archives/s"
+	fi
+
+	log "$DATA - I am looking for ${KLIENT_POCZTY} folders on ${PARTYCJA}..."
+	#sprawdzamy czy katalog istnieje
+	if [ -d  "$SCIEZKA_DO_KLIENTA" ]
+		then
+		#zapisuje sciezke do klienta
+		echo $SCIEZKA_DO_KLIENTA >> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/$KLIENT_POCZTY/path_${KLIENT_POCZTY}.txt
+		log "  I found ${KLIENT_POCZTY} folder in ${SCIEZKA_DO_KLIENTA}"
+		#szukamy zalozonych kont
+		find "${SCIEZKA_DO_KLIENTA}" -iname "${FORMAT_POCZTY}" > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/${KLIENT_POCZTY}/mails_in_${KLIENT_POCZTY}.txt
+		#zlicza ilosc znalezionych maili/kont
+		ILOSC_MAILI=$(cat ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/${KLIENT_POCZTY}/mails_in_${KLIENT_POCZTY}.txt | wc -l )
+		log "- I found ${ILOSC_MAILI} ${CO_ZNALEZIONO} in ${KLIENT_POCZTY}"
+ 	else 
+		log "- I did not find ${KLIENT_POCZTY} folder in ${SCIEZKA_DO_KLIENTA}"
+	fi
+
+done
+

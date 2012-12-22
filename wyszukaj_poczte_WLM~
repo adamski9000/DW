@@ -14,7 +14,7 @@ for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
 			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}; fi
 		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail ]; then 
 			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail; fi
-		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook ]; then 
+		if [ ! -d ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook; then 
 			mkdir ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/Outlook; fi
 
 		DATA=`date "+%y-%m-%d %H:%M:%S"`

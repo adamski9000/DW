@@ -1,0 +1,5 @@
+#!/bin/bash
+
+KATALOG_GLOWNY=~/DW/badanie
+
+echo $1 >> ${KATALOG_GLOWNY}/log.txt 
