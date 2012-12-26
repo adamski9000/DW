@@ -21,7 +21,7 @@ mkdir -p ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/${KLIENT_POCZTY} &&
 log "- ${KLIENT_POCZTY} Mail folders on destination drive correct. OK" || 
 log " I coud NOT create ${KLIENT_POCZTY} Mail folders on destination drive. Error." 
 
-for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt`
+for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt`
    do
 
 	if [ "$KLIENT_POCZTY" == "Outlook" ]; then
@@ -33,7 +33,7 @@ for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt
 		FORMAT_POCZTY="*.eml"
 		CO_ZNALEZIONO="mails"
 	elif [ "$KLIENT_POCZTY" == "Thunderbird" ]; then
-		SCIEZKA_DO_KLIENTA="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Thunderbird"
+		SCIEZKA_DO_KLIENTA="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Thunderbird/Profiles"
 		FORMAT_POCZTY="inbox"
 		CO_ZNALEZIONO="archives/s"
 	fi

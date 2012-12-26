@@ -18,10 +18,10 @@ log "$DATA - Im preapereing to find email clients."
 
 #tworzy katalogi jesli nie ma
 mkdir -p ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/${KLIENT_POCZTY} && 
-log "- ${KLIENT_POCZTY} folders on destination drive correct. OK" || 
-log " I coud NOT create ${KLIENT_POCZTY} folders on destination drive. Error." 
+log "- ${KLIENT_POCZTY} Mail folders on destination drive correct. OK" || 
+log " I coud NOT create ${KLIENT_POCZTY} Mail folders on destination drive. Error." 
 
-for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt`
+for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt`
    do
 
 	if [ "$KLIENT_POCZTY" == "Outlook" ]; then

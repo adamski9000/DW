@@ -12,7 +12,7 @@ function log()
 UZYTKOWNIK=$1
 KLIENT_POCZTY=$2
 
-INFO_OK="- Link to ${KLIENT_POCZTY} contacts saved correct. OK."
+INFO_OK="- Link to ${KLIENT_POCZTY} Contacts saved correct. OK."
 
 DATA=`date "+%y-%m-%d %H:%M:%S"`
 
@@ -26,7 +26,7 @@ log "- ${KLIENT_POCZTY} Contacts folders on destination drive correct. OK" ||
 if [ $KLIENT_POCZTY == "WLM" ]; 
 then
     #sprawdzamy na kazdej z partycji windowsowych
-    for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
+    for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt`
    	do
 	  # sciezka do ksiazki adrresowej dla wersji Windows Live Mail 2011
 	  SCIEZKA_WLM_2012="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live/Contacts/Default/15.4/DBStore/contacts.edb"
@@ -37,10 +37,10 @@ then
 
 	  if [ -e  "$SCIEZKA_WLM_2012" ]; then
 		echo $SCIEZKA_WLM_2012 >> $PLIK
-		log  $INFO_OK 
+		log  "$INFO_OK" 
 	  elif [ -e "$SCIEZKA_WLM_2009" ]; then
 		echo $SCIEZKA_WLM_2009 >> $PLIK
-		log  $INFO_OK		
+		log  "$INFO_OK"		
 	  fi
     done
     # jesli plik z linkiem do oryginalu nie istnieje lub jest pusty
@@ -50,15 +50,32 @@ then
 
 elif [ $KLIENT_POCZTY == "Outlook" ];
 then
-	for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`
+	for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt`
    	    do
 		#plik z kontaktami i z mailami to jest ten sam plik *.pst
 		PLIK_PST="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Outlook/*.pst"
 		#jesli jakis istnieje na partycji windowsowej	
-		if [ -e "$PLIK_PST" ]; then
-			echo $PLIK_PST >> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Contacts/${KLIENT_POCZTY}/path_Outlook_contacts.txt 
-			log  $INFO_OK
+		if [ -e $PLIK_PST ]; then
+		   find /media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Outlook/ -name "*.pst" > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Contacts/${KLIENT_POCZTY}/path_Outlook_contacts.txt 
+		   log  "$INFO_OK"
+		else
+		   	log "- I could not find ${KLIENT_POCZTY} Contacts on ${PARTYCJA}"		
 		fi 
 	done
-
+elif [ $KLIENT_POCZTY == "Thunderbird" ];
+then
+	for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt`
+   	    do
+		SCIEZ="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Thunderbird/Profiles"
+		if [ -d "$SCIEZ" ]; then
+			#w plikach abook.mab i history.mab znajduja sie kontakty
+			find $SCIEZ \( -name "abook.mab" -o -name "history.mab" \) -print > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Contacts/${KLIENT_POCZTY}/path_Thunderbird_contacts.txt 
+			log  "$INFO_OK"
+		else
+		   log "- I could not find ${KLIENT_POCZTY} Contacts on ${PARTYCJA}"		
+		fi
+	done
+fi
  
+
+

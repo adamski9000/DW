@@ -23,15 +23,11 @@ mkdir -p "${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Communicators/${KOMUNIKATOR}" &&
 log "- ${KOMUNIKATOR} folders on destination drive correct. OK" || 
 { log " I coud NOT create ${KOMUNIKATOR} folders on destination drive. Error."; exit 1; }
 
-if [ $KOMUNIKATOR == "Skype" ] || [ $KOMUNIKATOR == "GG" ]; 
-then
-
+if [ $KOMUNIKATOR == "Skype" ] || [ $KOMUNIKATOR == "GG" ]; then
+	[ $KOMUNIKATOR == "Skype" ] && SCIEZ="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Skype"
+	[ $KOMUNIKATOR == "GG" ] && SCIEZ="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/GG/Profiles"
 	for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt`
    	    do
-
-		[ $KOMUNIKATOR == "Skype" ] && SCIEZ="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Skype"
-		[ $KOMUNIKATOR == "GG" ] && SCIEZ="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/GG/Profiles"
-		
 		if [ -d "$SCIEZ" ]; then
 			find $SCIEZ  -name "*.db" -print > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Communicators/${KOMUNIKATOR}/path_${KOMUNIKATOR}_archives.txt 
 			log  "- Link to ${KOMUNIKATOR} archive saved correct. OK."
@@ -39,6 +35,5 @@ then
 		   log "- I could not find ${KOMUNIKATOR} archives on ${PARTYCJA}"		
 		fi
 	done
-
 fi
 

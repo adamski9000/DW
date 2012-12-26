@@ -9,8 +9,8 @@ function log()
 
 #zabezpieczenie, aby nie dopisywall partycji systemowych win przy przypadkowymponownym wywolaniu. 
 #jesli plik istnieje i nie jest pusty wtedy przerywamy
-if [ -e "${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt" ] || 
-	[ -s "${KATALOG_GLOWNY}/system_info/partycja_startowa_windows.txt" ]
+if [ -e "${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt" ] || 
+	[ -s "${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt" ]
 	  then 
 		#jest juz plik z partycja. Przerywamy
 		exit -1
@@ -26,7 +26,7 @@ do
 	#sprawdzamy czy to nie przypadkowy katalog sprawdzajac katalogi domyslne czy istnieja
 	if [ -d /media/${PARTYCJA}/Users/Public/Desktop ] && [ -d /media/${PARTYCJA}/Users/Default/AppData ]
 		then
-			echo $PARTYCJA >> $KATALOG_GLOWNY/system_info/partycja_startowa_windows.txt
+			echo $PARTYCJA >> $KATALOG_GLOWNY/system_info/partycja_systemowa_windows.txt
 			log "- Disk with Windows system found on disk: ${PARTYCJA}"	
 	fi
 done
@@ -34,11 +34,11 @@ done
 
 #zapisuje loga
 #jesli plik istnieje i nie jest pusty
-SCIEZ1="system_info/partycja_startowa_windows.txt"
+SCIEZ1="system_info/partycja_systemowa_windows.txt"
 if [ ! -e ${KATALOG_GLOWNY}/${SCIEZ1} ] && [ ! -s  ${KATALOG_GLOWNY}/${SCIEZ1} ]
 then
 	log "- System with system Windows not found or no file or file is empty"
 fi
 
 #alternatywne rozwiazanie minimalnie wolniejsze, jako ciekawostka
-#awk '{system("find \/media\/"$0" -maxdepth 1 -type d -name \"Users\" >> partycja_startowa_windows.txt")}' ../system_info/partycje_win.txt
+#awk '{system("find \/media\/"$0" -maxdepth 1 -type d -name \"Users\" >> partycja_systemowa_windows.txt")}' ../system_info/partycje_win.txt

@@ -1,11 +1,9 @@
 #!/bin/bash -x
- 
-while read LINE
-do
-        echo ${LINE}
-done < ~/DW/badanie/log.txt
 
-[ -e ~/DW/badanie/*.txz ] && echo "OK" || echo "NO"
+
+[ -e /media/sda1/Users/admin/AppData ] && echo "OK" || echo "NO"
+
+find /media/sda1/Users/admin -name "*.pst" -print > ~/DW/badanie/test.txt
 
 
 

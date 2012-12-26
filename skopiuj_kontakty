@@ -1,0 +1,41 @@
+#!/bin/bash -x
+
+#format wywolania pliku: skopiuj_kontakty uzytkownik klientpoczty. Przyklad: skopiuj_poczte admin WLM
+#kopiuje poczte z zapisanych sciezek w katalogu poczty
+
+KATALOG_GLOWNY=~/DW/badanie
+
+function log()
+{
+	echo $1 >> ${KATALOG_GLOWNY}/log.txt 
+}
+
+UZYTKOWNIK=$1
+KLIENT_POCZTY=$2
+
+KATALOG_PRZEZNACZENIA=${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Contacts/${KLIENT_POCZTY} 
+
+DATA=`date "+%y-%m-%d %H:%M:%S"`
+
+log "$DATA - Preapering to copy ${KLIENT_POCZTY} Contacts files."
+
+if [ ! -d $KATALOG_PRZEZNACZENIA ]; then 
+	log "-  Error with copy. No ${KATALOG_PRZEZNACZENIA} folder."
+	exit 1; #koniec skryptu
+elif [ ! -e $KATALOG_PRZEZNACZENIA/path_${KLIENT_POCZTY}_contacts.txt ]; then
+	log "-  Error with copy. No path_${KLIENT_POCZTY}_contacts.txt file."
+	exit 1; #koniec skryptu
+elif [ ! -s $KATALOG_PRZEZNACZENIA/path_${KLIENT_POCZTY}_contacts.txt ]; then
+	log "-  Error with copy. File path_${KLIENT_POCZTY}_contacts.txt is empty."
+	exit 1; #koniec skryptu
+else
+	while read SCIEZKA_DO_ORYGINALU
+	do
+		#kopiuje wszystkie pliki,katalogi i podkatalogi
+		cp -R "$SCIEZKA_DO_ORYGINALU"  "$KATALOG_PRZEZNACZENIA" &&
+			#jesli sie uda skopiowac
+			log "-  Coped ${KLIENT_POCZTY} files. OK." ||
+				#jesli sie nie uda
+				log "-  Error with copy ${KLIENT_POCZTY} files. Error."
+	done < $KATALOG_PRZEZNACZENIA/path_${KLIENT_POCZTY}_contacts.txt
+fi

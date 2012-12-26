@@ -18,7 +18,7 @@ fi
 
 DATA=`date "+%y-%m-%d %H:%M:%S"`
 
-log "$DATA - Im looking for disks with system Windows."
+log "$DATA - Im looking for disks with Windows systems."
 
 #wyszukaj dysk systemowy
 for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt`

@@ -45,3 +45,4 @@ USERS
 a) utworz_katalog_glowny - tworzy katalog glowny badania i podkatalogi. 
 b) zamontuj partycje - montuje partycje windows
 c) wyszukaj_dysk_systemowy - wyszukuje dysk systemowy
+d) wyszukaj uzytkownikow systemu - zapisuje uzytkownikow windows z katalogu Users
