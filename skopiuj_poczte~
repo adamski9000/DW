@@ -29,15 +29,21 @@ elif [ ! -s $KATALOG_PRZEZNACZENIA/path_${KLIENT_POCZTY}.txt ]; then
 	log "-  Error with copy. File path_${KLIENT_POCZTY}.txt is empty."
 	exit 1; #koniec skryptu
 else
-	while read $SCIEZKA_DO_ORYGINALU
-	do
-        	#kopiuje wszystkie pliki,katalogi i podkatalogi
-		cp -R "$SCIEZKA_DO_ORYGINALU"  "$KATALOG_PRZEZNACZENIA" &&
+	#gdy aoutlook - brak parametru, kopiuje tylko pliki
+	#gdy WLM lub Thunderbird nadaje parametr do kopiowania calych katalogow, podkatalogow i plikow
+        [ "$KLIENT_POCZTY" == "Outlook" ] && PARAMETR="" || PARAMETR="-R" 
+	#z racji iz potrzebujemy cala strukture kopiujemy wszystkie katalogi z podanej sciezki z pliku
+	[ "$KLIENT_POCZTY" == "WLM" ] && PLIK="path_${KLIENT_POCZTY}.txt" || PLIK="mails_in_${KLIENT_POCZTY}.txt"
+	
+	for SCIEZKA_DO_ORYGINALU in `cat ${KATALOG_PRZEZNACZENIA}/${PLIK}`
+	  do
+		#gdy outlook kopiuje tylko wskazany plik gdy inne klienty kopije calle katalogi z plikami
+		cp $PARAMETR "$SCIEZKA_DO_ORYGINALU"  "$KATALOG_PRZEZNACZENIA" &&
 			#jesli sie uda skopiowac
 			log "-  Coped ${KLIENT_POCZTY} files. OK." ||
 				#jesli sie nie uda
 				log "-  Error with copy ${KLIENT_POCZTY} files. Error." 
-	done < $KATALOG_PRZEZNACZENIA/path_${KLIENT_POCZTY}.txt
+	done
 fi
 
 

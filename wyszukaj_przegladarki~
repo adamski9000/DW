@@ -28,4 +28,21 @@ then
    	    do
 		find /media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows/Temporary\ Internet\ Files -name "index.dat" > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Browsers/${PPZEGLADARKA}/path_${PPZEGLADARKA}_archives.txt && log  "- Link to ${PPZEGLADARKA} archive saved correct. OK." || log "- I could not find ${PPZEGLADARKA} archives on ${PARTYCJA}"		
 	done
+elif [ $PPZEGLADARKA == "Firefox" ]; 
+then
+	for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt`
+   	    do
+		find /media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Mozilla/Firefox/Profiles -type f -iname "formhistory.sqlite" -o -iname "downloads.sqlite" -o -iname "cookies.sqlite" -o -iname "places.sqlite"> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Browsers/${PPZEGLADARKA}/path_${PPZEGLADARKA}_archives.txt 
+		ILOSC_ZNALEZIONYCH=`cat ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Browsers/${PPZEGLADARKA}/path_${PPZEGLADARKA}_archives.txt | wc -l`			
+		[ "$ILOSC_ZNALEZIONYCH" == 4 ] && log  "- Link to ${ILOSC_ZNALEZIONYCH} ${PPZEGLADARKA} archives saved correct. OK." || log "- I could not find all ${PPZEGLADARKA} archives on ${PARTYCJA}. I found only ${ILOSC_ZNALEZIONYCH} archives"	
+	done
+elif [ $PPZEGLADARKA == "Chrome" ]; 
+then
+	for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.txt`
+   	    do
+		find /media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Google/Chrome -type f -iname "Bookmarks" -o -iname "Cookies" -o -iname "History" -o -iname "Login Data" -o -iname "Web Data"> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Browsers/${PPZEGLADARKA}/path_${PPZEGLADARKA}_archives.txt 	
+		#zlicza ilosc znalezionych i zapisanych archiwow		
+		ILOSC_ZNALEZIONYCH=`cat ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Browsers/${PPZEGLADARKA}/path_${PPZEGLADARKA}_archives.txt | wc -l`			
+		[ "$ILOSC_ZNALEZIONYCH" == 5 ] && log  "- Link to ${ILOSC_ZNALEZIONYCH} ${PPZEGLADARKA} archives saved correct. OK." || log "- I could not find all ${PPZEGLADARKA} archives on ${PARTYCJA}. I found only ${ILOSC_ZNALEZIONYCH} archives"
+	done
 fi

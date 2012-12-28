@@ -26,30 +26,37 @@ for PARTYCJA in `cat ${KATALOG_GLOWNY}/system_info/partycja_systemowa_windows.tx
 
 	if [ "$KLIENT_POCZTY" == "Outlook" ]; then
 		SCIEZKA_DO_KLIENTA="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Outlook"
-		FORMAT_POCZTY="*.pst"
+		CZEGO_SZUKAMY="-iname *.pst"
 		CO_ZNALEZIONO="archive/s"
 	elif [ "$KLIENT_POCZTY" == "WLM" ]; then
 		SCIEZKA_DO_KLIENTA="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Local/Microsoft/Windows Live Mail"
-		FORMAT_POCZTY="*.eml"
+		CZEGO_SZUKAMY="-iname *.eml"
 		CO_ZNALEZIONO="mails"
 	elif [ "$KLIENT_POCZTY" == "Thunderbird" ]; then
-		SCIEZKA_DO_KLIENTA="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Thunderbird"
-		FORMAT_POCZTY="inbox"
+		SCIEZKA_DO_KLIENTA="/media/${PARTYCJA}/Users/${UZYTKOWNIK}/AppData/Roaming/Thunderbird/Profiles"
+		#w tych katalogach jest cala poczta kont imap i pop3	
+		CZEGO_SZUKAMY="-type d -iname ImapMail -o -iname Mail"
 		CO_ZNALEZIONO="archives/s"
 	fi
+	
 
 	log "$DATA - I am looking for ${KLIENT_POCZTY} folders on ${PARTYCJA}..."
 	#sprawdzamy czy katalog istnieje
-	if [ -d  "$SCIEZKA_DO_KLIENTA" ]
-		then
+	if [ -d  "$SCIEZKA_DO_KLIENTA" ];
+	  then
+	
 		#zapisuje sciezke do klienta
 		echo $SCIEZKA_DO_KLIENTA >> ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/$KLIENT_POCZTY/path_${KLIENT_POCZTY}.txt
+		
 		log "  I found ${KLIENT_POCZTY} folder in ${SCIEZKA_DO_KLIENTA}"
+		
 		#szukamy zalozonych kont
-		find "${SCIEZKA_DO_KLIENTA}" -iname "${FORMAT_POCZTY}" > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/${KLIENT_POCZTY}/mails_in_${KLIENT_POCZTY}.txt
+		find "${SCIEZKA_DO_KLIENTA}" $CZEGO_SZUKAMY > ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/${KLIENT_POCZTY}/mails_in_${KLIENT_POCZTY}.txt
 		#zlicza ilosc znalezionych maili/kont
 		ILOSC_MAILI=$(cat ${KATALOG_GLOWNY}/Users/${UZYTKOWNIK}/Mail/${KLIENT_POCZTY}/mails_in_${KLIENT_POCZTY}.txt | wc -l )
+		
 		log "- I found ${ILOSC_MAILI} ${CO_ZNALEZIONO} in ${KLIENT_POCZTY}"
+
  	else 
 		log "- I did not find ${KLIENT_POCZTY} folder in ${SCIEZKA_DO_KLIENTA}"
 	fi

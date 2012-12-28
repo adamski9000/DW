@@ -1,9 +1,11 @@
 #!/bin/bash -x
 
 
-[ -e /media/sda1/Users/admin/AppData ] && echo "OK" || echo "NO"
+ILOSC_ZNALEZIONYCH=`cat ~/DW/badanie/Users/admin/Browsers/Chrome/path_Chrome_arshives.txt | wc -l`
 
-find /media/sda1/Users/admin -name "*.pst" -print > ~/DW/badanie/test.txt
+[ "$ILOSC_ZNALEZIONYCH" == 5 ] && Z="OK2" || Z="NO"
+
+echo $Z
 
 
 

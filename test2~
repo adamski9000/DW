@@ -1,3 +1,9 @@
 #!/bin/bash 
 
-echo "test 2"
+DYSK="sda1"
+P="/media/${DYSK}/Users/admin/AppData/Local/Microsoft/Windows Live Mail";
+[ -d "$P" ] && echo "OK" || echo "NO" 
+
+SCIEZKA_DO_KLIENTA="/media/sda1/Users/admin/AppData/Local/Microsoft/Windows Live Mail"
+CZEGO_SZUKAMY="-type d Windows Live Mail"
+find ${SCIEZKA_DO_KLIENTA} ${CZEGO_SZUKAMY} -print
