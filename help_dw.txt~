@@ -39,7 +39,7 @@ USERS
 
 
 4. Bugi
-	a) wykrywa tylko jedna partycje systemową windows. Gdy jest wiecej nie wykrywa. Ograniczenie w pliku wyszukaj_dysk_systemowy. Jest to spowodowane tym, iz gdy zapisze w pliku partycja_systemowa_windows wiecej partycji, pozniej jest problem, gdyz zamiast czytac jedna dostepna sciezke, czytaja wszystkie i sie sypie
+	
 
 5. Kolejnosc uruchamiania skryptow.
 a) utworz_katalog_glowny - tworzy katalog glowny badania i podkatalogi. 

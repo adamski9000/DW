@@ -1,0 +1,37 @@
+#!/bin/bash -x
+
+#skrypt wyszukuje i montuje partycje windosowe jesli nie sa zamontowane
+
+
+#wyszukuje wszystkie dyski i partycje win i przypisuje do zmiennnej
+PARTYCJE=$(sudo fdisk -l | 
+#wyszykuje tylko te windosowe 
+grep 'HPFS\|NTFS\|exFAT\|FAT' |
+#pobiera pierwsza kolumne np /dev/sda1/
+awk '{ print $1 }' | 
+#selekcjonuje np. z /dev/sda1 drugi czlon - sda1
+cut -d / -f 3)
+
+[ "$PARTYCJE" == "" ] 
+
+for PARTYCJA_DO_ZAMONTOWANIA in $PARTYCJE
+do
+	#jesli w pliku mounts nie istnieje nazwa to nie zamontowany, jesli istniej to zamontowany i nic nie robimy
+	if [ ! -n $(grep "${PARTYCJA_DO_ZAMONTOWANIA}" /proc/mounts) ]
+	then
+    		#sprawdzamy czy katalog juz istnieje. Jesli istnieje montujemy 
+		if [ -d /media/${PARTYCJA_DO_ZAMONTOWANIA} ]; then 
+			sudo mount -r /dev/"${PARTYCJA_DO_ZAMONTOWANIA}" /media/"${PARTYCJA_DO_ZAMONTOWANIA}"  
+		else 
+			#jesli nie istnieje tworzymy go i montujemy
+			sudo mkdir /media/${PARTYCJA_DO_ZAMONTOWANIA} 
+			sudo mount -r /dev/"${PARTYCJA_DO_ZAMONTOWANIA}" /media/"${PARTYCJA_DO_ZAMONTOWANIA}"
+		fi	
+	fi
+done
+
+
+
+
+
+

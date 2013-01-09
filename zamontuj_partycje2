@@ -51,7 +51,7 @@ if [ -e ${KATALOG_GLOWNY}/system_info/partycje_win.txt ] && [ -s ${KATALOG_GLOWN
 then
 	ILOSC_PARTYCJI=`cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt | wc -l`
 	log "- Found ${ILOSC_PARTYCJI} windows partition/s"
-	yad --title="$NAZWA_PROGRAMU" --text="I look for disks and partitions" --timeout=5 --no-buttons
+	#yad --title="$NAZWA_PROGRAMU" --text="I look for disks and partitions" --timeout=5 --no-buttons
 else
 	log "- No file with info about windows partition or file is empty"
 	exit 1

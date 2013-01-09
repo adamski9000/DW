@@ -50,7 +50,7 @@ cut -d / -f 3 > ${KATALOG_GLOWNY}/system_info/partycje_win.txt
 if [ -e ${KATALOG_GLOWNY}/system_info/partycje_win.txt ] && [ -s ${KATALOG_GLOWNY}/system_info/partycje_win.txt ]
 then
 	ILOSC_PARTYCJI=`cat ${KATALOG_GLOWNY}/system_info/partycje_win.txt | wc -l`
-	log "- Found ${ILOSC_PARTYCJI} windows partition"
+	log "- Found ${ILOSC_PARTYCJI} windows partition/s"
 else
 	log "- No file with info about windows partition or file is empty"
 	exit 1

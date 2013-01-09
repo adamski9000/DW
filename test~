@@ -1,11 +1,28 @@
 #!/bin/bash -x
 
+NAZWA_PROGRAMU="Detective Windows 0.3"
+IKONA=~/DW/main/graf/DooFi_detective64.png
 
-ILOSC_ZNALEZIONYCH=`cat ~/DW/badanie/Users/admin/Browsers/Chrome/path_Chrome_arshives.txt | wc -l`
+FILE=welcome.txt
 
-[ "$ILOSC_ZNALEZIONYCH" == 5 ] Z="OK2" 
+zenity --text-info --title="License" --filename=$FILE --checkbox="I read and accept the terms."
 
-echo $Z
+case $? in
+    0)
+        echo "Start installation!"
+	# next step
+	;;
+    1)
+        echo "Stop installation!"
+	;;
+    -1)
+        echo "An unexpected error has occurred."
+	;;
+esac
 
+yad --title="$NAZWA_PROGRAMU" --text="I look for disks and partitions" --timeout=3 --no-buttons
 
+./test2
+#find $HOME -name '*.ps' | yad --progress --pulsate
 
+#yad --title="Desktop entry editor" --text="Simple desktop entry editor" --form --field="Type:CB" --field="Name" --field="Generic name" --field="Comment" --field="Command:FL" --field="Icon" --field="In terminal:CHK" --field="Startup notify:CHK" "Application" "Name" "Generic name" "This is the comment" "/usr/bin/yad" "yad" FALSE TRUE --button="WebUpd8:2" --button="gtk-ok:0" --button="gtk-cancel:1"

@@ -5,6 +5,9 @@
 #aby katalog glowny badania sie nie powtarzal nadajemy mu oprocz nazwy numery
 #format katalogu: nazwakatalogu_czasutc
 
+# gui
+yad --title="Detective Windows 0.3" --text="Insert name of case" --form
+
 function log()
 {
 	echo $1 >> $KATALOG_GLOWNY/log.txt
@@ -31,7 +34,7 @@ if [ -d "$KATALOG_GLOWNY/Users" ]
 then	
 	
 	#zapisuje loga do DW/badanie
-	log "- Main folders created correct in ${KATALOG_GLOWNY}. OK "
+	log "- Main folders correct in ${KATALOG_GLOWNY}. OK "
 	#ustawia zmienna globalna. 
 	#do tej sciezki beda odnosic sie wszystkie inne skrypty
 	export KATALOG_GLOWNY=$KATALOG_GLOWNY
